@@ -3,8 +3,8 @@
 import Link from "next/link";
 
 const MyPage = () => {
-  const userName = "山田太郎"; // 例としての名前
-  const userBirthDate = "1990年1月1日"; // 例としての生年月日
+  const userName = "小谷飛平"; // 例としての名前
+  const userBirthDate = "1995年4月14日"; // 例としての生年月日
   const userImage = "/images/Taro.png"; // ユーザーの画像URL
   const matchingHistory = [
     {
@@ -13,7 +13,6 @@ const MyPage = () => {
       photo: "/images/Taro.png",
       name: "山田 太郎",
       background: "東京音楽大学卒業、ジャズピアニスト",
-      experience: 5,
       age: 30,
       fee: 3000,
       online: true,
@@ -22,22 +21,20 @@ const MyPage = () => {
       date: "2024年09月15日",
       result: "マッチング成功",
       photo: "/images/Taro.png",
-      name: "田中",
-      background: "東京音楽大学卒業、ジャズピアニスト",
-      experience: 5,
-      age: 30,
+      name: "田中 大五郎",
+      background: "京都市立音楽大学卒業、バイオリニスト",
+      age: 28,
       fee: 3000,
       online: true,
     },
     {
-      date: "2024年08月30日",
+      date: "2023年08月30日",
       result: "マッチング成功",
       photo: "/images/Taro.png",
-      name: "山田 太郎",
-      background: "東京音楽大学卒業、ジャズピアニスト",
-      experience: 5,
-      age: 30,
-      fee: 3000,
+      name: "Brian 佐藤",
+      background: "コロラド州立音楽大学卒業、ブルースギタリスト",
+      age: 27,
+      fee: 6000,
       online: true,
     },
   ];
