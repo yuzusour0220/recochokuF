@@ -8,6 +8,7 @@ const DiagnosticPage = () => {
   const [level, setLevel] = useState("1");
   const [genre, setGenre] = useState("");
   const [online, setOnline] = useState("");
+  const [ownership, setOwnership] = useState(""); // 修正
   const [region, setRegion] = useState("");
   const [showRegion, setShowRegion] = useState(false);
   const [otherInstrument, setOtherInstrument] = useState("")
@@ -24,6 +25,14 @@ const DiagnosticPage = () => {
       setRegion("");
     }
   };
+
+  const handleOwnershipChange = (value) => {
+    setOwnership(value);
+    setShowRegion(false); // 地域選択を表示しない
+    setRegion(""); // 所持が変更された場合は地域をクリア
+  };
+  
+
   const handleInstructionPeriodChange = (value) => {
     setInstructionPeriod(value);
     if (value === "その他") {
@@ -201,6 +210,29 @@ const DiagnosticPage = () => {
               ))}
             </div>
           </div>
+
+                        {/* 所持 */}
+          <div className="mb-4">
+            <label className="block text-gray-700 mb-2">
+              所持<span className="text-red-500">*</span>
+            </label>
+            <div className="flex space-x-4">
+              {["Yes", "No"].map((option) => (
+                <label key={option} className="flex items-center">
+                  <input
+                    type="radio"
+                    name="ownership" // 所持のラジオボタンの名前
+                    value={option}
+                    checked={ownership === option}
+                    onChange={(e) => handleOwnershipChange(e.target.value)}
+                    required
+                    className="mr-2"
+                    />
+                    {option}
+                  </label>
+                ))}
+              </div>
+            </div>
 
           {/* 地域選択（オンラインが Yes または どちらでもの場合） */}
           {showRegion && (
