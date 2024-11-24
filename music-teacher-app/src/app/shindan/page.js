@@ -1,4 +1,5 @@
 "use client";
+
 import Link from "next/link";
 import { useState } from "react";
 
@@ -10,31 +11,36 @@ const DiagnosticPage = () => {
   const [online, setOnline] = useState("");
   const [region, setRegion] = useState("");
   const [showRegion, setShowRegion] = useState(false);
-  const [otherInstrument, setOtherInstrument] = useState("")
+  const [otherInstrument, setOtherInstrument] = useState("");
+  const [otherGenre, setOtherGenre] = useState("");
   const [instructionPeriod, setInstructionPeriod] = useState("");
   const [customPeriod, setCustomPeriod] = useState("");
   const [showCustomPeriod, setShowCustomPeriod] = useState(false);
 
+  /**
+   * オンライン/オフラインの選択時に地域選択を制御する関数
+   * @param {string} value - ユーザーが選択したオンラインオプション（"Yes", "No", "どちらでも"）
+   */
   const handleOnlineChange = (value) => {
     setOnline(value);
-    if (value !== "Yes") {
-      setShowRegion(true);
-    } else {
-      setShowRegion(false);
-      setRegion("");
-    }
-  };
-  const handleInstructionPeriodChange = (value) => {
-    setInstructionPeriod(value);
-    if (value === "その他") {
-      setShowCustomPeriod(true);
-    } else {
-      setShowCustomPeriod(false);
-      setCustomPeriod("");
-    }
+    setShowRegion(value !== "Yes");
+    if (value === "Yes") setRegion("");
   };
 
-  // 全ての入力が有効か確認
+  /**
+   * 指導期間の選択時にカスタム期間入力を制御する関数
+   * @param {string} value - ユーザーが選択した指導期間
+   */
+  const handleInstructionPeriodChange = (value) => {
+    setInstructionPeriod(value);
+    setShowCustomPeriod(value === "その他"); // 「その他」が選択された場合のみカスタム入力を表示
+    if (value !== "その他") setCustomPeriod(""); // 「その他」でない場合、カスタム入力をリセット
+  };
+
+  /**
+   * フォームの入力内容がすべて有効かを確認する関数
+   * @returns {boolean} - 有効であればtrue、無効であればfalse
+   */
   const isFormValid = () => {
     return (
       instrument &&
@@ -42,26 +48,32 @@ const DiagnosticPage = () => {
       level &&
       genre &&
       online &&
-      (showRegion ? region : true) // regionはオンラインの場合のみ必須
+      (showRegion ? region : true) // 地域選択が必要な場合はregionもチェック
     );
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-6 text-center">診断ページ</h1>
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-gray-100 flex items-center justify-center p-6">
+      {/* フォームを囲むコンテナ */}
+      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-2xl border border-gray-200">
+        {/* ページタイトル */}
+        <h1 className="text-3xl font-bold mb-8 text-center text-gray-900">
+          診断ページ
+        </h1>
         <form>
-          {/* 楽器 */}
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="instrument">
+          {/* 楽器選択フィールド */}
+          <div className="mb-6">
+            <label
+              className="block text-gray-900 font-semibold mb-2"
+              htmlFor="instrument"
+            >
               楽器<span className="text-red-500">*</span>
             </label>
             <select
               id="instrument"
               value={instrument}
               onChange={(e) => setInstrument(e.target.value)}
-              required
-              className="w-full border border-gray-300 p-2 rounded"
+              className="w-full border border-gray-300 p-3 rounded focus:ring-2 focus:ring-pink-400 focus:outline-none transition-shadow"
             >
               <option value="">選択してください</option>
               <option value="ピアノ">ピアノ</option>
@@ -69,23 +81,24 @@ const DiagnosticPage = () => {
               <option value="チェロ">チェロ</option>
               <option value="その他">その他</option>
             </select>
-
-            {/* 「その他」の場合にテキスト入力欄を表示 */}
+            {/* 「その他」が選択された場合の追加入力フィールド */}
             {instrument === "その他" && (
               <input
                 type="text"
                 placeholder="具体的に入力してください"
-                value={otherInstrument} // otherInstrument用のstateを別途追加
+                value={otherInstrument}
                 onChange={(e) => setOtherInstrument(e.target.value)}
-                required
-                className="w-full border border-gray-300 p-2 rounded mt-2"
+                className="w-full mt-3 border border-gray-300 p-3 rounded focus:ring-2 focus:ring-pink-400 focus:outline-none transition-shadow placeholder-gray-600"
               />
             )}
           </div>
 
-          {/* 目標 */}
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="goal">
+          {/* 目標入力フィールド */}
+          <div className="mb-6">
+            <label
+              className="block text-gray-900 font-semibold mb-2"
+              htmlFor="goal"
+            >
               目標<span className="text-red-500">*</span>
             </label>
             <input
@@ -93,22 +106,24 @@ const DiagnosticPage = () => {
               id="goal"
               value={goal}
               onChange={(e) => setGoal(e.target.value)}
-              required
               placeholder="例: コンサートで演奏したい"
-              className="w-full border border-gray-300 p-2 rounded"
+              className="w-full border border-gray-300 p-3 rounded focus:ring-2 focus:ring-pink-400 focus:outline-none transition-shadow placeholder-gray-600"
             />
           </div>
-          {/* 指導期間 */}
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="instructionPeriod">
+
+          {/* 指導期間選択フィールド */}
+          <div className="mb-6">
+            <label
+              className="block text-gray-900 font-semibold mb-2"
+              htmlFor="instructionPeriod"
+            >
               指導期間<span className="text-red-500">*</span>
             </label>
             <select
               id="instructionPeriod"
               value={instructionPeriod}
               onChange={(e) => handleInstructionPeriodChange(e.target.value)}
-              required
-              className="w-full border border-gray-300 p-2 rounded"
+              className="w-full border border-gray-300 p-3 rounded focus:ring-2 focus:ring-pink-400 focus:outline-none transition-shadow"
             >
               <option value="">選択してください</option>
               <option value="1ヶ月">1ヶ月</option>
@@ -116,41 +131,32 @@ const DiagnosticPage = () => {
               <option value="6ヶ月">6ヶ月</option>
               <option value="その他">その他</option>
             </select>
-          </div>
-
-          {/* その他の指導期間 */}
-          {showCustomPeriod && (
-            <div className="mb-4">
-              <label className="block text-gray-700 mb-2" htmlFor="customPeriod">
-                指導期間を入力してください<span className="text-red-500">*</span>
-              </label>
+            {/* 「その他」が選択された場合のカスタム期間入力 */}
+            {showCustomPeriod && (
               <input
                 type="text"
-                id="customPeriod"
+                placeholder="具体的に入力してください"
                 value={customPeriod}
                 onChange={(e) => setCustomPeriod(e.target.value)}
-                required={showCustomPeriod}
-                placeholder="例: 2ヶ月"
-                className="w-full border border-gray-300 p-2 rounded"
+                className="w-full mt-3 border border-gray-300 p-3 rounded focus:ring-2 focus:ring-pink-400 focus:outline-none transition-shadow placeholder-gray-600"
               />
-            </div>
-          )}
+            )}
+          </div>
 
-          {/* レベル */}
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">
+          {/* レベル選択 */}
+          <div className="mb-6">
+            <label className="block text-gray-900 font-semibold mb-2">
               レベル<span className="text-red-500">*</span>
             </label>
-            <div className="flex space-x-4">
+            <div className="flex justify-between">
               {[1, 2, 3, 4, 5].map((num) => (
-                <label key={num} className="flex items-center">
+                <label key={num} className="flex items-center text-gray-900">
                   <input
                     type="radio"
                     name="level"
                     value={num}
                     checked={level === num.toString()}
                     onChange={(e) => setLevel(e.target.value)}
-                    required
                     className="mr-2"
                   />
                   {num}
@@ -159,17 +165,19 @@ const DiagnosticPage = () => {
             </div>
           </div>
 
-          {/* ジャンル */}
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="genre">
+          {/* ジャンル選択 */}
+          <div className="mb-6">
+            <label
+              className="block text-gray-900 font-semibold mb-2"
+              htmlFor="genre"
+            >
               ジャンル<span className="text-red-500">*</span>
             </label>
             <select
               id="genre"
               value={genre}
               onChange={(e) => setGenre(e.target.value)}
-              required
-              className="w-full border border-gray-300 p-2 rounded"
+              className="w-full border border-gray-300 p-3 rounded focus:ring-2 focus:ring-pink-400 focus:outline-none transition-shadow"
             >
               <option value="">選択してください</option>
               <option value="POPS">POPS</option>
@@ -177,23 +185,32 @@ const DiagnosticPage = () => {
               <option value="クラシック">クラシック</option>
               <option value="その他">その他</option>
             </select>
+            {/* 「その他」が選択された場合の追加入力フィールド */}
+            {genre === "その他" && (
+              <input
+                type="text"
+                placeholder="具体的に入力してください"
+                value={otherGenre}
+                onChange={(e) => setOtherGenre(e.target.value)}
+                className="w-full mt-3 border border-gray-300 p-3 rounded focus:ring-2 focus:ring-pink-400 focus:outline-none transition-shadow placeholder-gray-600"
+              />
+            )}
           </div>
 
-          {/* オンライン */}
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">
+          {/* オンライン選択 */}
+          <div className="mb-6">
+            <label className="block text-gray-900 font-semibold mb-2">
               オンライン<span className="text-red-500">*</span>
             </label>
-            <div className="flex space-x-4">
+            <div className="flex justify-between">
               {["Yes", "No", "どちらでも"].map((option) => (
-                <label key={option} className="flex items-center">
+                <label key={option} className="flex items-center text-gray-900">
                   <input
                     type="radio"
                     name="online"
                     value={option}
                     checked={online === option}
                     onChange={(e) => handleOnlineChange(e.target.value)}
-                    required
                     className="mr-2"
                   />
                   {option}
@@ -202,18 +219,20 @@ const DiagnosticPage = () => {
             </div>
           </div>
 
-          {/* 地域選択（オンラインが Yes または どちらでもの場合） */}
+          {/* 地域選択 */}
           {showRegion && (
-            <div className="mb-4">
-              <label className="block text-gray-700 mb-2" htmlFor="region">
+            <div className="mb-6">
+              <label
+                className="block text-gray-900 font-semibold mb-2"
+                htmlFor="region"
+              >
                 地域選択<span className="text-red-500">*</span>
               </label>
               <select
                 id="region"
                 value={region}
                 onChange={(e) => setRegion(e.target.value)}
-                required
-                className="w-full border border-gray-300 p-2 rounded"
+                className="w-full border border-gray-300 p-3 rounded focus:ring-2 focus:ring-pink-400 focus:outline-none transition-shadow"
               >
                 <option value="">地域を選択してください</option>
                 <option value="北海道">北海道</option>
@@ -224,14 +243,13 @@ const DiagnosticPage = () => {
             </div>
           )}
 
-          {/* 診断結果ボタン */}
+          {/* 送信ボタン */}
           <Link
             href="/teachers"
-            className={`w-full text-center block p-2 rounded transition-colors ${
-              isFormValid()
-                ? "bg-teal-500 text-white hover:bg-teal-600"
-                : "bg-gray-300 text-gray-500 pointer-events-none"
-            }`}
+            className={`w-full text-center block py-3 rounded-lg transition-colors ${isFormValid()
+              ? "bg-pink-400 text-white hover:bg-pink-500"
+              : "bg-gray-300 text-gray-500 pointer-events-none"
+              }`}
           >
             先生とマッチング
           </Link>

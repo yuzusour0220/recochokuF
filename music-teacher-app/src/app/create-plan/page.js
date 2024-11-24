@@ -1,19 +1,22 @@
 "use client";
-import { useRouter } from 'next/router';
 
-const LearningPlanPage = () => {
-  const router = useRouter();
-  const { teacher } = router.query; // URLから先生の情報を取得
+import Link from "next/link";
+
+const LearningPlanPage = ({ searchParams }) => {
+  // const teacher = searchParams?.teacher || "未指定"; // URLからクエリパラメータを取得
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
       <div className="bg-white p-8 rounded shadow-md w-full max-w-2xl">
         <h1 className="text-2xl font-bold mb-6 text-center">学習プラン</h1>
-        <h2 className="text-xl font-semibold mb-4">選択した先生: {teacher}</h2>
+        {/* <h2 className="text-xl font-semibold mb-4">選択した先生: {teacher}</h2> */}
         <p className="mb-4">
-          <strong>以下は、ピアノのコンサート出場を目指す3ヶ月間の学習プランです。初心者レベル（レベル1）で、ジャンルはクラシックに焦点を当てています。</strong>
+          <strong>
+            以下は、ピアノのコンサート出場を目指す3ヶ月間の学習プランです。
+            初心者レベル（レベル1）で、ジャンルはクラシックに焦点を当てています。
+          </strong>
         </p>
-        
+
         <h3 className="text-lg font-bold mt-6">1ヶ月目：基礎の習得</h3>
         <p className="mb-2">週1回のレッスン（対面またはオンライン）</p>
         <ul className="list-disc ml-5 mb-4">
@@ -60,12 +63,23 @@ const LearningPlanPage = () => {
         <ul className="list-disc ml-5 mb-4">
           <li>オンライン教材（動画チュートリアルや楽譜を活用）</li>
           <li>フィードバック（レッスン後に録音を聴き、改善点をメモ）</li>
-          <li>メンタル準備（本番前のリラックス法や集中力を高めるテクニックを学ぶ）</li>
+          <li>
+            メンタル準備（本番前のリラックス法や集中力を高めるテクニックを学ぶ）
+          </li>
         </ul>
 
         <p className="mt-4">
-          <strong>このプランを基に、生徒の進捗に応じて調整することが重要です。コンサート出場に向けて、自信を持って演奏できるようになることを目指しましょう。</strong>
+          <strong>
+            このプランを基に、生徒の進捗に応じて調整することが重要です。
+            コンサート出場に向けて、自信を持って演奏できるようになることを目指しましょう。
+          </strong>
         </p>
+
+        <div className="mt-8 text-center">
+          <Link href="/mypage" passHref>
+            マイページに戻る
+          </Link>
+        </div>
       </div>
     </div>
   );
