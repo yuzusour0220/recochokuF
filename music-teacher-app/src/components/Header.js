@@ -9,7 +9,14 @@ const Header = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           {/* サービス名 */}
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0 flex items-center">
+            <Link href="/mypage">
+              <img
+                src="/images/logo.png"
+                alt="ハーモマッチ ロゴ"
+                className="h-10 w-10 mr-3"
+              />
+            </Link>
             <Link
               href="/mypage"
               className="text-2xl font-bold hover:text-pink-300 transition duration-300"
@@ -17,6 +24,7 @@ const Header = () => {
               ハーモマッチ
             </Link>
           </div>
+
 
           {/* ナビゲーションリンク */}
           <nav className="hidden md:flex space-x-6">
